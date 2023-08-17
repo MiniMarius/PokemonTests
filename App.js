@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import TypeToColor from "./Colormapping";
 import {
   StyleSheet,
   Text,
@@ -25,7 +26,6 @@ export default function App() {
       });
 
       const detailsData = await Promise.all(detailsPromises);
-
       setPokemonData(detailsData);
     } catch (error) {
       console.error(error);
@@ -37,6 +37,7 @@ export default function App() {
   React.useEffect(() => {
     fetchData();
   }, []);
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -56,8 +57,13 @@ export default function App() {
         ) : (
           <View style={styles.grid}>
             {pokemonData.map((pokemon, index) => {
+              const pokemonType = pokemon.types[0].type.name;
+              const bgColor = TypeToColor[pokemonType];
               return (
-                <View key={index} style={styles.box}>
+                <View
+                  key={index}
+                  style={[styles.box, { backgroundColor: bgColor }]}
+                >
                   <Image
                     style={styles.pokeImage}
                     source={{
@@ -107,7 +113,6 @@ const styles = StyleSheet.create({
     height: 150,
     width: 150,
     alignItems: "center",
-    backgroundColor: "white",
     borderRadius: 15,
     margin: 10,
   },
