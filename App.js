@@ -16,7 +16,9 @@ export default function App() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch("https://pokeapi.co/api/v2/pokemon/");
+      const response = await fetch(
+        "https://pokeapi.co/api/v2/pokemon?limit=150&offset=0"
+      );
       const json = await response.json();
 
       const detailsPromises = json.results.map(async (pokemon) => {
@@ -56,12 +58,12 @@ export default function App() {
           <ActivityIndicator style={styles.loadingspinner}></ActivityIndicator>
         ) : (
           <View style={styles.grid}>
-            {pokemonData.map((pokemon, index) => {
+            {pokemonData.map((pokemon) => {
               const pokemonType = pokemon.types[0].type.name;
               const bgColor = TypeToColor[pokemonType];
               return (
                 <View
-                  key={index}
+                  key={pokemon.id}
                   style={[styles.box, { backgroundColor: bgColor }]}
                 >
                   <Image
